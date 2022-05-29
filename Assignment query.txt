@@ -1,0 +1,32 @@
+1.
+select * from Client_master;
+
+2. select city,name from Client_master;
+
+3. select description from product_master;
+
+5.SELECT NAME
+FROM CLIENT_MASTER
+WHERE NAME LIKE '_a%';
+
+6.select name
+FROM CLIENT_MASTER
+WHERE city LIKE '_a%';
+
+7.select name
+from client_master
+where city='Bombay'or city='Delhi'or city='Madras';
+
+7.select name
+from client_master
+where city in('Bombay','Delhi','Madras');
+
+8.select *
+from client_master
+where city='Bombay';
+
+9.select name
+from client_master
+where bal_due >1000;
+
+10. 

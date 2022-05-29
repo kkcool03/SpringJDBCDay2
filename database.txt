@@ -1,0 +1,233 @@
+create table challan_details(
+challan_no varchar(6) primary key check(challan_no like 'CH%'),
+product_no varchar(6),
+qty_disp number(4,2),
+CONSTRAINT fk_s1_order_no FOREIGN key(s_order_no) references sales_order(s_order_no)
+);
+
+
+=================================================================
+
+CREATE TABLE sales_order(
+s_order_no varchar(6)check(s_order_no like 'O%'),
+s_order_date date,
+client_no varchar(6),
+dely_addr varchar(25),
+salesman_no varchar(6),
+dely_type CHAR(1),
+billed_yn char(1),
+dely_date date,
+order_status varchar(10),
+constraint pk_s_order_no primary KEY(s_order_no),
+constraint fk_client_no FOREIGN key(client_no) references salesman_master(salesman_no),
+constraint ck_dely_type check(dely_type in('P','F')),
+constraint ck_billed_yn check(billed_yn in('Y','N')),
+CONSTRAINT ck_dely_date check(dely_date > s_order_date),
+CONSTRAINT ck_order_status check(order_status in('in process','Fulfilled','BackOrder','Canceled'))
+);
+
+==================================================================================
+
+create table Client_master(
+client_no varchar(6) primary key check(client_no like 'C%'),
+name varchar(20) not null,
+address1 varchar(30),
+address2 varchar(30),
+city varchar(15),
+state varchar(15),
+pincode NUMBER(6),
+bal_due number(10,2)
+);
+desc Client_master;
+
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00001','Ivan Bayross','Bombay',400054,'Maharashtra',15000);
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00002','Vandana Saitwal','Madras',780001,'Tamil nadu',0);
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00003','pramada jaguste','Bombay',400057,'Maharashtra',5000);
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00004','Basu Navindgi','Bombay',400056,'Maharashtra',0);
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00005','Ravi Sreedharan','Delhi',100001,'Delhi',2000);
+insert into Client_master(client_no,name,city,pincode,state,bal_due)values('C00006','Rukmini','Bombay',400050,'Maharashtra',0);
+
+
+select * from Client_master;
+=================================================================================================================================================
+
+create table product_master(
+product_no varchar(6) primary key check(product_no like 'P%'),
+description varchar(50) not null,
+profit_percent number(3,2) not null,
+unit_measure varchar(10) not null,
+qty_on_hand number(10),
+record_lvl NUMBER(8) not null,
+sell_price NUMBER(8,2)not null check(sell_price >0),
+cost_price NUMBER(8,2)not null check(cost_price >0)
+);
+
+desc product_master;
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P00001','1.44 Floppies',5,'Piece',100,20,525,500);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P03453','Monitors',5,'Piece',10,3,12000,11280);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P06734','Mouse',5,'Piece',20,5,1050,1000);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P07865','1.22 Floppies',5,'Piece',100,20,525,500);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P07868','Keyboards',2,'Piece',10,3,3150,3050);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P07885','CD Drive',2.5,'Piece',10,3,5250,5100);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P07965','540 HDD',4,'Piece',10,3,8400,8000);
+insert into product_master(product_no,description,profit_percent,unit_measure,qty_on_hand,record_lvl,sell_price,cost_price)
+values('P07975','1.44 Drive',5,'Piece',10,3,1050,1000);
+
+
+
+==============================================================================================================================================
+
+
+create table salesman_master(
+salesman_no varchar(6) primary key check(salesman_no like 'S%'),
+salesman_name varchar(20) not null,
+address1 varchar(30),
+address2 varchar(30),
+city varchar(20),
+pincode varchar(6),
+state varchar(20),
+sal_amt number(8,2)not null check(sal_amt > 0),
+tgt_to_tgt number(6,2)not null check(tgt_to_tgt > 0),
+ytd_sales number(6,2) not null,
+remarks varchar(60)
+);
+
+insert into salesman_master(salesman_no,salesman_name,address1,address2,city,pincode,state,sal_amt,tgt_to_tgt,ytd_sales,remarks)
+values('S00001','Kiran','A/14','Worli','Bombay',400002,'MAH',3000,100,50,'Good');
+insert into salesman_master(salesman_no,salesman_name,address1,address2,city,pincode,state,sal_amt,tgt_to_tgt,ytd_sales,remarks)
+values('S00002','Manish','65','Nariman','Bombay',400001,'MAH',3000,200,100,'Good');
+insert into salesman_master(salesman_no,salesman_name,address1,address2,city,pincode,state,sal_amt,tgt_to_tgt,ytd_sales,remarks)
+values('S00003','Ravi','P-7','Bandra','Bombay',400032,'MAH',3000,200,100,'Good');
+insert into salesman_master(salesman_no,salesman_name,address1,address2,city,pincode,state,sal_amt,tgt_to_tgt,ytd_sales,remarks)
+values('S00004','Ashish','A/5','Juhu','Bombay',400044,'MAH',3500,200,150,'Good');
+
+
+drop table salesman_master;
+
+========================================================================================================================================
+CREATE TABLE sales_order(
+s_order_no varchar(6)check(s_order_no like 'O%'),
+s_order_date date,
+client_no varchar(6),
+dely_addr varchar(25),
+salesman_no varchar(6),
+dely_type CHAR(1),
+billed_yn char(1),
+dely_date date,
+order_status varchar(10),
+constraint pk_s_order_no primary KEY(s_order_no),
+constraint fk_client_no FOREIGN key(client_no) references salesman_master(salesman_no),
+constraint ck_dely_type check(dely_type in('P','F')),
+constraint ck_billed_yn check(billed_yn in('Y','N')),
+CONSTRAINT ck_dely_date check(dely_date > s_order_date),
+CONSTRAINT ck_order_status check(order_status in('in process','Fulfilled','BackOrder','Canceled'))
+);
+
+
+
+DROP table product_master;
+
+create table sales_order_details(
+s_order_no varchar(6),
+product_no varchar(6),
+qty_ordered number(8),
+qty_disp number(8),
+product_rate NUMBER(10,2),
+CONSTRAINT fk_s_order_no FOREIGN key(s_order_no) references sales_order(s_order_no),
+CONSTRAINT fk_product_no FOREIGN key(product_no) references product_master(product_no)
+);
+
+create table challan_header(
+challan_no varchar(6) primary key check(challan_no like 'CH%'),
+s_order_no varchar(6),
+qty_ordered number(8),
+qty_disp number(8),
+product_rate NUMBER(10,2),
+CONSTRAINT fk_s1_order_no FOREIGN key(s_order_no) references sales_order(s_order_no)
+);
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=====================================================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+create table employee(
+employee_id varchar(10),
+first_name varchar(50) not null,
+last_name varchar(50) not null,
+age number(3) not null,
+gender varchar (7) not null,
+qualification varchar (20) not null,
+salary number(7,2) not null,
+location varchar(20) not null,
+constraint pk_employee_id primary key (employee_id)
+);
+
+insert into employee values('MGS3498','Rohit','Thakur',23,'Male','B.E Comp',29730,'Thane');
+insert into employee values('MGS3493','Priyanka','Tayde',25,'Female','B.E Comp',29730,'Mumbai');
+insert into employee values('MGS3409','Aruna','Vasave',24,'Female','B.E Comp',29730,'Thane');
+insert into employee values('MGS3499','Ravina','Suryavanshi',26,'Female','B.E Comp',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3505','Kiran','Kadam',24,'Male','B.E. Extc',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3510','Chaitanya','Raykar',25,'Male','B.E. Civil',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3496','Santosh','Honrao',24,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3504','Shubham','Labde',24,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3502','Pravin','Yadav',25,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3516','Tejas','Zambare',23,'Male','B.E. Elec',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3500','Nitesh','Subhedar',24,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3508','Vaibhav','Tekude',23,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3491','Meraj','Shaikh',24,'Male','B.E. Mech',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3495','Shashank','Lokhande',24,'Male','B.E. Extc',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3507','Vinaya','Naik',24,'Female','B.E. Comps',29730,'Mumbai');
+INSERT INTO employee VALUES
+('MGS3597','Sanika','Manchekar',23,'Female','B.E. IT',29730,'Navi Mumbai');
+INSERT INTO employee VALUES
+('MGS3489','Dinesh','Saple',25,'Male','B.E. Elec',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3492','Paras','Gharu',25,'Male','B.E. Mech',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3490','Mahima','Dube',23,'Female','M.Sc - IT',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3506','Komal','More',23,'Female','BTech - Comp',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3503','Rahul','Bhatlavande',24,'Male','B.E. Comp',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3515','Harshal','Bhagade',24,'Male','B.E. Mech',29730,'Thane');
+INSERT INTO employee VALUES
+('MGS3494','Pratap','Bagwe',23,'Male','BTech Mech',29730,'Mumbai');
+
+commit;
+=============================
+select * from employee;
+================================
+select employee_id, first_name,salary from employee;
+================================================================
+select employee_id, first_name,last_name,salary from employee;
+=========================================================================
+
+select employee_id, first_name || ' ' ||last_name AS full_name,salary from employee;
+
+=====================================================================================
+select * from employee order by location,first_name;
+=========================================================
+
+
+insert into employee_manager_details values(1, 'Vivek',1000,NULL);
+insert into employee_manager_details values(2, 'kiran',1200,2);
